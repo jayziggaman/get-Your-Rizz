@@ -1,0 +1,301 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  font-family: 'Montserrat', sans-serif;
+}
+
+:root {
+  --other-black: rgb(52, 51, 51);
+  --light-mode-bgc: rgb(235, 235, 238);
+  --light-mode-color: #91C7BA;
+  --light-green: #6a9e92;
+  --second-black: rgb(25, 24, 24);
+  --border-black: rgb(79, 77, 77);
+  --bold-text: 'Clash Display', sans-serif;
+}
+
+.App {
+  overflow-x: hidden;
+}
+
+main {
+  min-height: 100vh;
+  height: auto;
+}
+
+a,
+button {
+  cursor: pointer;
+  transition: all 350ms ease-in-out;
+}
+
+.home-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  border-bottom: 2px solid gainsboro;
+  display: grid;
+  justify-items: center;
+  grid-template-rows: 30px 1fr;
+  padding: 10px 0px 0px;
+  background-color: #fff;
+  z-index: 10;
+  /* gap: 20px; */
+}
+
+.home-header>span {
+  position: fixed;
+  background-color: var(--other-black);
+  z-index: -1;
+  top: 40.5px;
+  height: 48px;
+  left: 0;
+  right: 0;
+  display: inline-block;
+}
+
+.home-header>p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.home-header>div {
+  display: grid;
+  width: 100%;
+  max-width: 1000px;
+  grid-template-columns: 1fr 1fr;
+  /* gap: 20px; */
+  background-color: var(--other-black);
+  border-top: 1px solid gainsboro;
+  align-items: center;
+  padding: 0px 10px;
+  position: relative;
+}
+
+.home-header>div a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  height: 75%;
+  border-radius: 10px;
+  color: white;
+  position: relative;
+  z-index: 10;
+  background-color: transparent;
+  transition: color 0ms;
+}
+
+.home-header>div a.active-link {
+  color: black;
+}
+
+.home-header>div>span {
+  font-size: 30px;
+  font-weight: 200;
+  position: absolute;
+  height: 75%;
+  width: 47.5%;
+  background-color: #fff;
+  border-radius: 10px;
+  left: 10px;
+  z-index: 1;
+  transition: all 500ms ease-in-out;
+  cursor: pointer;
+}
+
+.home-header>div>span.latest-link {
+  transform: translateX(100%);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.rizzes {
+  margin-top: 100px;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 50px;
+  padding: 20px;
+  width: 99vw;
+  max-width: 750px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.rizz {
+  border: 1px solid gainsboro;
+  width: 100%;
+  min-height: 300px;
+  height: auto;
+}
+
+.rizz-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 15px;
+  border-bottom: 1px solid gainsboro;
+  height: 40px;
+}
+
+.rizz-top>span:first-child {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  gap: 10px;
+}
+
+.rizz-top>span:nth-child(2) {
+  position: relative;
+}
+
+.rizz-top>span:nth-child(2) svg {
+  /* position: absolute;
+  right: 15px;
+  top: 35%; */
+  cursor: pointer;
+}
+
+.rizz-top>span:nth-child(2) audio {
+  /* opacity: 0; */
+  display: none;
+}
+
+.rizz-top>span:first-child img {
+  height: 30px;
+  width: 30px;
+  border-radius: 20px;
+  background-color: gainsboro;
+}
+
+
+
+.rizz-mid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 220px;
+  /* height: auto; */
+  cursor: pointer;
+}
+
+.rizz-mid img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+
+
+
+.rizz-bottom {
+  border-top: 1px solid gainsboro;
+  padding-left: 15px;
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  height: auto;
+}
+
+
+
+
+
+
+
+/* RIZZ MODAL */
+.rizz-modal {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 50;
+  transform: scale(0%);
+  transition: all 350ms ease-in-out;
+}
+
+.rizz-modal.show {
+  transform: scale(100%);
+}
+
+.rizz-modal-cancel {
+  width: 100%;
+  height: 70px;
+  display: flex;
+  gap: 5px;
+  justify-content: flex-end;
+  padding-right: 30px;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+}
+
+.rizz-modal-cancel span {
+  display: inline-block;
+  background-color: red;
+  height: 25px;
+  width: 3px;
+  border-radius: 20px;
+}
+
+.rizz-modal-cancel span:first-child {
+  transform: rotateZ(135deg);
+  position: absolute;
+}
+
+.rizz-modal-cancel span:last-child {
+  transform: rotateZ(45deg);
+}
+
+.rizz-modal-img {
+  margin: auto;
+  height: 80%;
+  width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rizz-modal-img img {
+  /* height: auto; */
+  height: 90%;
+  border: none;
+  width: 100%;
+  object-fit: contain;
+}
