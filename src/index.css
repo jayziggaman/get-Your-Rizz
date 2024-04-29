@@ -181,13 +181,34 @@ button {
 
 .rizz-top>span:nth-child(2) {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.rizz-top>span:nth-child(2) svg {
+.rizz-top>span:nth-child(2) span {
+  background-color: gainsboro;
+  padding: 5px;
+  font-size: 0.8rem;
+  position: absolute;
+  top: -150%;
+  transition: all 300ms ease-in-out;
+}
+
+.rizz-top>span:nth-child(2) svg,
+.rizz-top>span:nth-child(2) svg path {
   /* position: absolute;
   right: 15px;
   top: 35%; */
   cursor: pointer;
+  font-size: 20px;
+  transition: all 350ms ease-in-out;
+}
+
+.rizz-top>span:nth-child(2).is-playing svg,
+.rizz-top>span:nth-child(2).is-playing svg path {
+  color: rgb(167, 45, 45);
+  font-size: 22px;
 }
 
 .rizz-top>span:nth-child(2) audio {

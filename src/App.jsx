@@ -19,16 +19,16 @@ export const appContext = React.createContext()
 const App = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
   const [rizzes, setRizzes] = useState([
-    { id: 'zero', img: rizz1 },
-    { id: 'one', img: rizz2 },
-    { id: 'two', img: rizz3 },
-    { id: 'three', img: rizz4 },
-    { id: 'four', img: rizz5 },
-    { id: 'five', img: rizz6 },
-    { id: 'six', img: rizz7 },
-    { id: 'seven', img: rizz8 },
-    { id: 'eight', img: rizz9 },
-    { id: 'nine', img: rizz10 }])
+    { id: 'zero', img: rizz1, isPlaying: false },
+    { id: 'one', img: rizz2, isPlaying: false  },
+    { id: 'two', img: rizz3, isPlaying: false  },
+    { id: 'three', img: rizz4, isPlaying: false  },
+    { id: 'four', img: rizz5, isPlaying: false  },
+    { id: 'five', img: rizz6, isPlaying: false  },
+    { id: 'six', img: rizz7, isPlaying: false  },
+    { id: 'seven', img: rizz8, isPlaying: false  },
+    { id: 'eight', img: rizz9, isPlaying: false  },
+    { id: 'nine', img: rizz10, isPlaying: false  }])
   const [showRizzModal, setShowRizzModal] = useState(false)
 
   const [showTopRizz, setShowTopRizz] = useState(true)

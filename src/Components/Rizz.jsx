@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { FaVolumeUp, FaThumbsUp ,FaRegThumbsUp } from 'react-icons/fa'
+import { FaVolumeUp, FaThumbsUp, FaRegThumbsUp, FaVolumeMute } from 'react-icons/fa'
 import { appContext } from '../App'
 
 //placeholder audio to test the start and stop feature
@@ -7,9 +7,10 @@ import audioPlay from '../audio/rihanna.mp3'
 
 
 const Rizz = ({rizz}) => {
-  const { setShowRizzModal, setRizzModalImg } = useContext(appContext)
-  const { id, img } = rizz
-  const [playAudio, setPlayAudio] = useState(false)
+  const { setShowRizzModal, setRizzModalImg, rizzes } = useContext(appContext)
+  const [thisRizz, setThisRizz] = useState(rizz)
+  const { id, img } = thisRizz
+  const [isHovering, setIsHovering] = useState(false)
 
   const audioRef = useRef()
 
@@ -22,31 +23,61 @@ const Rizz = ({rizz}) => {
   }
 
 
-  //This function sets everythign for the audio to be played. Since the audio itself has it's display set to none, the speaker/volume up icon will be used to controle the auido settings of the audio tag.
+  //This function sets everything for the audio to be played. Since the audio itself has it's display set to none, the speaker/volume up icon will be used to controle the auido settings of the audio tag.
+  let rizzId = useRef('')
+  //id of the 'rizz' that was just clicked
   const playAudioFtn = (e) => {
-    //the 'rizz' variable represents the particular rizz that it's speaker icon was clicked  
-    const rizzId = e.currentTarget.dataset.rizzid
-    const rizz = document.querySelector(`.${rizzId}`)
+    const id = e.currentTarget.dataset.rizzid
+    rizzId.current = id
+    //finding the span that encloses the audio tag and the speaker icon 
+    const rizzSpan = document.querySelector(`.${id}`)
 
-    const audio = rizz.querySelector('audio')
-    audioRef.current = audio
+    //the auido tag itself
+    const rizzAudio = rizzSpan.querySelector('audio')
 
-    setPlayAudio(!playAudio)
+    //chnaging the play/pause state of the audio tag depending on its previous state
+    if (rizzAudio.paused) {
+      rizzAudio.play()
+
+    } else {
+      rizzAudio.pause()
+    }
   }
 
 
   useEffect(() => {
-    if (audioRef.current) {
-      if (playAudio) {
-        audioRef.current.play()
+    // checking to see if rizzId.current === ''. This useEffect runs multiple times because the play/pause state of the audio tag were merged. Pausing one audio tag because another one was played will result in this useEffect running more than once.
+    if (rizzId.current !== '') {
+      rizzes.map(rizz => {
+        if (rizz.id !== rizzId.current) {
+          const id = rizz.id
+          
+          const rizzSpan = document.querySelector(`.${id}`)
+          const rizzAudio = rizzSpan.querySelector('audio')
   
-      } else {
-        audioRef.current.pause()
-      }
+          rizzAudio.pause()
+        }
+      })
     }
-  }, [playAudio])
+    // you have to ser rizzId.current to '' so that we can detect when the re run is intentional or a side effect. An intentional one will have a valid id but a re run will have have a value of '' and won't run 
+    rizzId.current = ''
+  }, [thisRizz])
+
+
+  useEffect(() => {
+    //setting a timeout on the play/pause text that shows above the speake icon so it does not stay forever
+    const timeout = setTimeout(() => {
+      if (isHovering) {
+        setIsHovering(false)
+      }
+    }, 3000);
+
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [isHovering])
   
-  
+
 
   return (
     <article className={`rizz ${id}`}>
@@ -57,11 +88,22 @@ const Rizz = ({rizz}) => {
           <p>Admin</p>
         </span>
 
-        <span role={'button'} data-rizzid={id}
-          onClick={e => playAudioFtn(e)}
+        <span role={'button'} data-rizzid={id} onClick={e => playAudioFtn(e)}
+          className={thisRizz.isPlaying ? 'is-playing' : ''}
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
         >
-          <FaVolumeUp />
-          <audio controls>
+          <span style={{opacity: isHovering ? '1' : '0'}}>
+            {thisRizz.isPlaying ? 'Pause' : 'Play'}
+          </span>
+
+          {thisRizz.isPlaying ? <FaVolumeMute /> : <FaVolumeUp />}
+
+          <audio ref={audioRef} loop controls data-audioid={id}
+            // syncing the rizz.isPlaying property with the audio tag's paused/playing state
+            onPlay={() => setThisRizz({...thisRizz, isPlaying: true})}
+            onPause={() => setThisRizz({...thisRizz, isPlaying: false})}
+          >
             <source src={audioPlay} type="audio/mpeg" />
             Your browser does not support the audio element.
           </audio>
