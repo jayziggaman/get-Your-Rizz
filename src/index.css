@@ -159,17 +159,19 @@ button {
 .rizz {
   border: 1px solid gainsboro;
   width: 100%;
-  min-height: 300px;
+  min-height: 310px;
   height: auto;
+  display: grid;
+  grid-template-rows: 1fr 220px 40px;
 }
 
 .rizz-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0px 15px;
+  padding: 0px 10px;
   border-bottom: 1px solid gainsboro;
-  height: 40px;
+  height: 100%;
 }
 
 .rizz-top>span:first-child {
@@ -184,43 +186,49 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
+  height: 100%;
+}
+
+.rizz-top>span:nth-child(2) button {
+  background-color: transparent;
+  border: none;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .rizz-top>span:nth-child(2) span {
   background-color: gainsboro;
-  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 0.8rem;
   position: absolute;
-  top: -150%;
-  transition: all 300ms ease-in-out;
+  top: -70%;
+  height: 40px;
+  transition: all 300ms ease-in-out, width 0ms;
 }
 
 .rizz-top>span:nth-child(2) svg,
 .rizz-top>span:nth-child(2) svg path {
-  /* position: absolute;
-  right: 15px;
-  top: 35%; */
   cursor: pointer;
-  font-size: 20px;
+  font-size: 18px;
   transition: all 350ms ease-in-out;
-}
-
-.rizz-top>span:nth-child(2).is-playing svg,
-.rizz-top>span:nth-child(2).is-playing svg path {
-  color: rgb(167, 45, 45);
-  font-size: 22px;
+  color: black;
 }
 
 .rizz-top>span:nth-child(2) audio {
-  /* opacity: 0; */
   display: none;
 }
 
 .rizz-top>span:first-child img {
-  height: 30px;
-  width: 30px;
+  height: 40px;
+  width: 40px;
   border-radius: 20px;
   background-color: gainsboro;
+  object-fit: contain;
 }
 
 
@@ -245,11 +253,45 @@ button {
 
 .rizz-bottom {
   border-top: 1px solid gainsboro;
-  padding-left: 15px;
-  display: flex;
-  align-items: center;
   min-height: 40px;
   height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rizz-bottom button {
+  background-color: transparent;
+  border: none;
+  font-size: 18px;
+  height: 40px;
+  width: 45px;
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+  margin-right: 10px;
+}
+
+.rizz-bottom button svg,
+.rizz-bottom button svg path {
+  font-size: 25px;
+}
+
+.rizz-bottom div {
+  display: flex;
+  gap: 5px;
+  padding-right: 15px;
+}
+
+.rizz-bottom span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.rizz-bottom span:nth-child(1) {
+  font-weight: bold;
 }
 
 
