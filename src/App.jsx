@@ -59,10 +59,20 @@ const App = () => {
   }, [])
 
 
+  //setting the users id
   useEffect(() => {
-    if (!userAuth) {
+    const auth = JSON.parse(localStorage.getItem('getyourrizz-userauth'))
+
+    if (!auth) {
       const id = uuidv4()
-      localStorage.setItem('getyourrizz-userauth', JSON.stringify(id))
+      setUserAuth(id)
+    }
+  }, [])
+
+
+  useEffect(() => {
+    if (userAuth) {
+      localStorage.setItem('getyourrizz-userauth', JSON.stringify(userAuth))
     }
   }, [userAuth])
   
