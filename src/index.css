@@ -127,6 +127,30 @@ button {
 
 
 
+.no-content {
+  margin-top: -200px;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.no-content img {
+  height: 120px;
+  width: 120px;
+  border-radius: 100px;
+  object-fit: cover;
+}
+
+
+
+
+
+
 
 
 
@@ -139,7 +163,7 @@ button {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 50px;
+  gap: 60px;
   padding: 20px;
   width: 99vw;
   max-width: 750px;
@@ -159,10 +183,10 @@ button {
 .rizz {
   border: 1px solid gainsboro;
   width: 100%;
-  min-height: 310px;
+  min-height: 390px;
   height: auto;
   display: grid;
-  grid-template-rows: 1fr 220px 40px;
+  grid-template-rows: 1fr 300px 40px;
 }
 
 .rizz-top {
@@ -206,8 +230,8 @@ button {
   justify-content: center;
   font-size: 0.8rem;
   position: absolute;
-  top: -70%;
-  height: 40px;
+  top: -50%;
+  height: 30px;
   transition: all 300ms ease-in-out, width 0ms;
 }
 
@@ -237,15 +261,45 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 220px;
-  /* height: auto; */
+  height: 300px;
   cursor: pointer;
+  position: relative;
+}
+
+.rizz-mid>span {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: gainsboro;
+  z-index: 5;
+  padding: 3px 7px;
+  border-radius: 20px;
+  font-size: 0.85rem;
 }
 
 .rizz-mid img {
   height: 100%;
   width: 100%;
   object-fit: cover;
+  transition: all 200ms ease-in-out;
+}
+
+button.btn {
+  position: absolute;
+  top: 42.5%;
+  height: 32px;
+  width: 32px;
+  background-color: gray;
+  border-radius: 30px;
+  z-index: 5;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button.btn.modal {
+  z-index: 50;
 }
 
 
@@ -307,7 +361,7 @@ button {
   bottom: 0;
   right: 0;
   left: 0;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.85);
   z-index: 50;
   transform: scale(0%);
   transition: all 350ms ease-in-out;
@@ -349,10 +403,11 @@ button {
 .rizz-modal-img {
   margin: auto;
   height: 80%;
-  width: 90%;
+  width: 95%;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .rizz-modal-img img {
@@ -361,4 +416,5 @@ button {
   border: none;
   width: 100%;
   object-fit: contain;
+  transition: all 200ms ease-in-out;
 }

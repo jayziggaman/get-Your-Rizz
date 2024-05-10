@@ -1,19 +1,21 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import {  FaPause, FaPlay } from 'react-icons/fa'
-import { Replay10, Forward10, ThumbUpAlt, ThumbUpOffAlt } from '@mui/icons-material';
+import { Replay10, Forward10, ThumbUpAlt, ThumbUpOffAlt, ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { appContext } from '../App'
-
-//placeholder audio to test the start and stop feature
-import audioPlay from '../audio/rihanna.mp3'
+import axios from 'axios';
+import { useSwipeable } from 'react-swipeable';
 
 //placeholder img for Admin
 import adminImg from '../images/c1.jpg'
 
 
 const Rizz = ({rizz}) => {
-  const { setShowRizzModal, setRizzModalImg, rizzes, userAuth } = useContext(appContext)
+  const { setShowRizzModal, setRizzModalImg, rizzes, setRizzes, setUser, user } = useContext(appContext)
+
+
   const [thisRizz, setThisRizz] = useState(rizz)
-  const { id, img } = thisRizz
+  // image, id, audio, likes, isPlaying
+  const [index, setIndex] = useState(0)
   const [hover, setHover] = useState({
     show: false, text: '', width: 0
   })
@@ -25,23 +27,27 @@ const Rizz = ({rizz}) => {
 
   const audioRef = useRef()
 
+
+  // useEffect(() => {}, [])
+
   const intiateModal = (e) => {
-    const rizzImg = e.currentTarget.id
     setShowRizzModal(true)
 
-    //make rizzModalImg be this particular image
-    setRizzModalImg(rizzImg)
+    //make rizzModalImg be the array of images for that rizz
+    setRizzModalImg(thisRizz.image)
   }
 
 
   //This function sets everything for the audio to be played. Since the audio itself has it's display set to none, the speaker/volume up icon will be used to controle the auido settings of the audio tag.
+
   let rizzId = useRef('')
   //id of the 'rizz' that was just clicked
+
   const playAudioFtn = e => {
     const id = e.currentTarget.dataset.rizzid
     rizzId.current = id
     //finding the span that encloses the audio tag and the speaker icon 
-    const rizzSpan = document.querySelector(`.${id}`)
+    const rizzSpan = document.getElementById(id)
 
     //the auido tag itself
     const rizzAudio = rizzSpan.querySelector('audio')
@@ -60,7 +66,7 @@ const Rizz = ({rizz}) => {
     const id = e.currentTarget.dataset.rizzid
     rizzId.current = id
     //finding the span that encloses the audio tag and the speaker icon 
-    const rizzSpan = document.querySelector(`.${id}`)
+    const rizzSpan = document.getElementById(id)
 
     //the auido tag itself
     const rizzAudio = rizzSpan.querySelector('audio')
@@ -80,7 +86,7 @@ const Rizz = ({rizz}) => {
     const id = e.currentTarget.dataset.rizzid
     rizzId.current = id
     //finding the span that encloses the audio tag and the speaker icon 
-    const rizzSpan = document.querySelector(`.${id}`)
+    const rizzSpan = document.getElementById(id)
 
     //the auido tag itself
     const rizzAudio = rizzSpan.querySelector('audio')
@@ -101,10 +107,10 @@ const Rizz = ({rizz}) => {
     // checking to see if rizzId.current === ''. This useEffect runs multiple times because the play/pause state of the audio tag were merged. Pausing one audio tag because another one was played will result in this useEffect running more than once.
     if (rizzId.current !== '') {
       rizzes.map(rizz => {
-        if (rizz.id !== rizzId.current) {
-          const id = rizz.id
+        if (rizz._id !== rizzId.current) {
+          const id = rizz._id
           
-          const rizzSpan = document.querySelector(`.${id}`)
+          const rizzSpan = document.getElementById(id)
           const rizzAudio = rizzSpan.querySelector('audio')
   
           rizzAudio.pause()
@@ -160,96 +166,174 @@ const Rizz = ({rizz}) => {
   }, [thisRizz])
 
 
-  const likeRizz = () => {
-    const condition = thisRizz.likes.find(like => like === userAuth)
+  const likeRizz = async (e) => {
+    const id = e.currentTarget.dataset.rizzid
+    const url = `
+    https://get-your-rizz-b61a0773d902.herokuapp.com/api/v1/rizz/${id}/like
+    `
+    const rizz = rizzes.find(rizz => rizz._id === id)
 
-    if (condition) {
-      setThisRizz({ ...thisRizz, likes: thisRizz.likes.filter(like => like !== userAuth) })
+    const response = await axios.post(url, { likes: rizz.likes + 1 })
+    setThisRizz(response.data.data)
 
-    } else {
-      setThisRizz({ ...thisRizz, likes: [...thisRizz.likes, userAuth] })
+    if (response.status === 200) {
+      let userLikes = JSON.parse(localStorage.getItem('getyourrizz-user')).likes
+      
+      const condition = userLikes.find(like => like === id)
+
+      if (!condition) {
+        userLikes = [...userLikes, id]
+
+        const user = JSON.parse(localStorage.getItem('getyourrizz-user'))
+
+        localStorage.setItem('getyourrizz-user', JSON.stringify({ ...user, likes: userLikes }))
+        setUser({ ...user, likes: userLikes })
+      }
     }
   }
+  
+  
+
+  const handlers = useSwipeable({
+    onSwipedLeft: () => {
+      if (index !== (thisRizz.image.length - 1)) {
+        setIndex(index => index + 1)
+
+      } else {
+        setIndex(index => (index - index))
+      }
+    } ,
+
+    onSwipedRight: () => {
+      if (index !== 0) {
+        setIndex(index => index - 1)
+
+      } else {
+        setIndex(index => (index + thisRizz.image.length - 1))
+      }
+    },
+  });
 
 
 
   return (
-    <article className={`rizz ${id}`}>
+      <article {...handlers} className={`rizz ${thisRizz._id}`}>
 
-      <div className='rizz-top'>
-        <span>
-          <img src={adminImg} alt="" />
-          <p>Admin</p>
-        </span>
-
-        <span role={'button'} 
-          className={thisRizz.isPlaying ? 'is-playing' : ''}
-        >
-          <span style={{opacity: hover.show ? '1' : '0', width: hover.width}}>
-            {hover.text}
+        <div className='rizz-top'>
+          <span>
+            <img src={adminImg} alt="" />
+            <p>Admin</p>
           </span>
 
-          {thisRizz.isPlaying &&
-            <button data-text='rewind 10s' data-rizzid={id} data-width={85}
-              onClick={e => rewind(e)} ref={btnRef} 
-            >
-              <Replay10 fontSize="large" color="black" style={{ color: 'black'}} />
-            </button>
-          }
-
-          <button data-text={thisRizz.isPlaying ? 'pause' : 'play'} data-rizzid={id}
-            onClick={e => playAudioFtn(e)} ref={btnRef} data-width={50}
+          <span role={'button'} className={thisRizz.isPlaying ? 'is-playing' : ''}
+            id={thisRizz._id}
           >
-            {thisRizz.isPlaying ? <FaPause /> : <FaPlay />}
-          </button>
+            <span style={{opacity: hover.show ? '1' : '0', width: hover.width}}>
+              {hover.text}
+            </span>
 
-          {thisRizz.isPlaying &&
-            <button data-text='fast forward 10s' data-rizzid={id} data-width={120}
-              onClick={e => fastFoward(e)} ref={btnRef}
+            {thisRizz.isPlaying &&
+              <button data-text='rewind 10s' data-rizzid={thisRizz._id}  ref={btnRef} 
+                data-width={85} onClick={e => rewind(e)}
+              >
+                <Replay10 fontSize="large" color="black" style={{ color: 'black'}} />
+              </button>
+            }
+
+            <button data-text={thisRizz.isPlaying ? 'pause' : 'play'}
+              data-rizzid={thisRizz._id} onClick={e => playAudioFtn(e)}
+              ref={btnRef} data-width={50}
             >
-              <Forward10 fontSize="large" color="black" style={{ color: 'black'}}/>
+              {thisRizz.isPlaying ? <FaPause /> : <FaPlay />}
             </button>
-          }
 
-          <audio ref={audioRef} loop controls data-audioid={id}
-            // syncing the rizz.isPlaying property with the audio tag's paused/playing state
-            onPlay={() => setThisRizz({...thisRizz, isPlaying: true})}
-            onPause={() => setThisRizz({...thisRizz, isPlaying: false})}
-          >
-            <source src={audioPlay} type="audio/mpeg" />
-            Your browser does not support the audio element.
-          </audio>
+            {thisRizz.isPlaying &&
+              <button data-text='fast forward 10s' data-rizzid={thisRizz._id}
+                data-width={120} onClick={e => fastFoward(e)} ref={btnRef}
+              >
+                <Forward10 fontSize="large" color="black" style={{ color: 'black'}}/>
+              </button>
+            }
 
-        </span>
-      </div>
+            <audio ref={audioRef} loop controls data-audioid={thisRizz._id}
+              // syncing the rizz.isPlaying property with the audio tag's paused/playing state
+              onPlay={() => setThisRizz({...thisRizz, isPlaying: true})}
+              onPause={() => setThisRizz({...thisRizz, isPlaying: false})}
+            >
+              <source src={thisRizz.audio} type="audio/mpeg" />
+              Your browser does not support the audio element.
+            </audio>
 
-      <div className='rizz-mid' id={img}
-        onClick={e => intiateModal(e)}
-      >
-        <img src={img} alt="" />
-      </div>
-
-      <div className='rizz-bottom'>
-        <button data-rizzid={id} onClick={e => likeRizz(e)}>
-          {/* {thisRizz.likes.find(like => like === userAuth) ?
-            <FaThumbsUp /> : <FaRegThumbsUp />
-          } */}
-          {thisRizz.likes.find(like => like === userAuth) ?
-            <ThumbUpAlt fontSize="large" color="black" style={{ color: 'red'}}/>
-            : <ThumbUpOffAlt fontSize="large" color="black" style={{ color: 'black'}}/>
-          }
-        </button>
-        
-        <div>
-          <span>
-            {thisRizz.likes.length} 
-          </span>
-          <span>
-            {thisRizz.likes.length === 1 ? 'like' : 'likes'}
           </span>
         </div>
-      </div>
-    </article>
+
+        <div className='rizz-mid'>
+          <span>
+            {index + 1} / {thisRizz.image.length}
+          </span>
+          
+          <button style={{ left: '10px' }} className='btn'
+            onClick={() => {
+              if (index !== 0) {
+                setIndex(index => index - 1)
+
+              } else {
+                setIndex(index => (index + thisRizz.image.length - 1))
+              }
+            }}
+          >
+            <ChevronLeft fontSize="large" color="black"
+              style={{ color: 'black' }}
+            />
+          </button>
+
+          {thisRizz.image.map((img, i) => {
+            return (
+              <img src={img} alt="Rizz img" key={i} onClick={e => intiateModal(e)}
+                style={{
+                  position: index !== i && 'absolute',
+                  zIndex: index === i ? '3' : '0',
+                  transform: index === i ? 'scale(100%)' : 'scale(70%)'
+                }}
+              />
+            )
+          })}
+
+          <button style={{ right: '10px' }} className='btn'
+            onClick={() => {
+              if (index !== (thisRizz.image.length - 1)) {
+                setIndex(index => index + 1)
+
+              } else {
+                setIndex(index => (index - index))
+              }
+            }}
+          >
+            <ChevronRight fontSize="large" color="black"
+              style={{ color: 'black' }}
+            />
+          </button>
+        </div>
+
+        <div className='rizz-bottom'>
+          <button data-rizzid={thisRizz._id} onClick={e => likeRizz(e)}>
+            {user?.likes.find(like => like === thisRizz._id) ?
+              <ThumbUpAlt fontSize="large" color="black" style={{ color: 'red'}}/>
+              : <ThumbUpOffAlt fontSize="large" color="black" style={{ color: 'black'}}/>
+            }
+          </button>
+          
+          <div>
+            <span>
+              {thisRizz.likes} 
+            </span>
+            <span>
+              {thisRizz.likes === 1 ? 'like' : 'likes'}
+            </span>
+          </div>
+        </div>
+
+      </article>
   )
 }
 

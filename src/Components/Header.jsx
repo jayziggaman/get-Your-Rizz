@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { NavLink, useSearchParams } from 'react-router-dom'
+import { appContext } from '../App'
 
 const Header = () => {
+  const {contentType, setContentType} = useContext(appContext)
   const [searchParams, setSearchParams] = useSearchParams()
   // contentType refers to whether the user is seeing rizz from the 'top' tab or the 'latest' tab
-  const [contentType, setContentType] = useState('top')
   
 
   useEffect(() => {
@@ -29,6 +30,9 @@ const Header = () => {
       <div>
         <NavLink to={'/?content-type=top'}
           className={contentType === 'top' ? 'active-link' : ''}
+          onClick={() => {
+            localStorage.setItem('getyourrizz-contentType', JSON.stringify('top'))
+          }}
         >
           Top
         </NavLink>
@@ -37,11 +41,13 @@ const Header = () => {
           className={contentType === 'top' ? 'top-link' :
           contentType === 'latest' && 'latest-link'}
         >
-          {/* / */}
         </span>
 
         <NavLink to={'/?content-type=latest'}
           className={contentType === 'latest' ? 'active-link' : ''}
+          onClick={() => {
+            localStorage.setItem('getyourrizz-contentType', JSON.stringify('latest'))
+          }}
         >
           Latest
         </NavLink>

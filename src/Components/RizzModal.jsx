@@ -1,8 +1,34 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { appContext } from '../App'
+import {  ChevronLeft, ChevronRight } from '@mui/icons-material';
+import { useSwipeable } from 'react-swipeable';
 
 const RizzModal = () => {
-  const { showRizzModal, setShowRizzModal, rizzModalImg, setRizzModalImg } = useContext(appContext)
+  const { showRizzModal, setShowRizzModal, rizzModalImg } = useContext(appContext)
+
+  const [index, setIndex] = useState(0)
+
+  const handlers = useSwipeable({
+    onSwipedLeft: () => {
+      if (index !== (rizzModalImg.length - 1)) {
+        setIndex(index => index + 1)
+
+      } else {
+        setIndex(index => (index - index))
+      }
+    } ,
+
+    onSwipedRight: () => {
+      if (index !== 0) {
+        setIndex(index => index - 1)
+
+      } else {
+        setIndex(index => (index + rizzModalImg.length - 1))
+      }
+    },
+  });
+
+
   
   return (
     <section className={showRizzModal ? "rizz-modal show" : 'rizz-modal'}>
@@ -13,9 +39,54 @@ const RizzModal = () => {
         <span></span>
       </button>
 
-      <div className="rizz-modal-img">
-        <img src={rizzModalImg} alt="" />
+      <div {...handlers} className="rizz-modal-img">
+        <button className='btn modal' style={{ left: '10px' }}
+          onClick={() => {
+          if (index !== 0) {
+            setIndex(index => index - 1)
+
+          } else {
+            setIndex(index => (index + rizzModalImg.length - 1))
+          }
+        }}
+         
+        >
+          <ChevronLeft fontSize="large" color="black"
+            style={{ color: 'black' }}
+          />
+        </button>
+
+        {rizzModalImg.map((img, i) => {
+          return (
+            <img key={i} src={img} alt=""
+              style={{
+                position: index !== i && 'absolute',
+                zIndex: index === i ? '5' : '0',
+                transform: index === i ? 'scale(100%)' : 'scale(70%)'
+              }}
+            />
+          )
+        })}
+
+        <button className='btn modal' style={{ right: '10px' }}
+          onClick={() => {
+          if (index !== (rizzModalImg.length - 1)) {
+            setIndex(index => index + 1)
+
+          } else {
+            setIndex(index => (index - index))
+          }
+        }}
+          
+        >
+          <ChevronRight fontSize="large" color="black"
+            style={{ color: 'black' }}
+          />
+        </button>
       </div>
+      
+      
+        
     </section>
   )
 }
