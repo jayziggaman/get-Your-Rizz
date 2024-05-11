@@ -192,7 +192,6 @@ const Rizz = ({rizz}) => {
     }
   }
   
-  
 
   const handlers = useSwipeable({
     onSwipedLeft: () => {
@@ -287,13 +286,15 @@ const Rizz = ({rizz}) => {
             />
           </button>
 
-          {thisRizz.image.map((img, i) => {
+          {thisRizz.image.sort((a, b) => a.number - b.number).map(img => {
+            const { link, _id, number } = img
             return (
-              <img src={img} alt="Rizz img" key={i} onClick={e => intiateModal(e)}
+              <img src={link} alt="Rizz img" key={_id}
+                onClick={e => intiateModal(e)}
                 style={{
-                  position: index !== i && 'absolute',
-                  zIndex: index === i ? '3' : '0',
-                  transform: index === i ? 'scale(100%)' : 'scale(70%)'
+                  position: index !== (number - 1) && 'absolute',
+                  zIndex: index === (number - 1) ? '3' : '0',
+                  transform: index === (number - 1) ? 'scale(100%)' : 'scale(70%)'
                 }}
               />
             )

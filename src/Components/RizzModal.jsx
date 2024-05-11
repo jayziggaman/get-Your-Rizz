@@ -55,18 +55,19 @@ const RizzModal = () => {
             style={{ color: 'black' }}
           />
         </button>
-
-        {rizzModalImg.map((img, i) => {
-          return (
-            <img key={i} src={img} alt=""
-              style={{
-                position: index !== i && 'absolute',
-                zIndex: index === i ? '5' : '0',
-                transform: index === i ? 'scale(100%)' : 'scale(70%)'
-              }}
-            />
-          )
-        })}
+        
+        {rizzModalImg.sort((a, b) => a.number - b.number).map(img => {
+            const { link, _id, number } = img
+            return (
+              <img src={link} alt="Modal img" key={_id}
+                style={{
+                  position: index !== (number - 1) && 'absolute',
+                  zIndex: index === (number - 1) ? '5' : '0',
+                  transform: index === (number - 1) ? 'scale(100%)' : 'scale(70%)'
+                }}
+              />
+            )
+          })}
 
         <button className='btn modal' style={{ right: '10px' }}
           onClick={() => {
