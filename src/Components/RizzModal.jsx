@@ -84,6 +84,10 @@ const RizzModal = () => {
             style={{ color: 'black' }}
           />
         </button>
+
+        <span className="index">
+          {index + 1} / {rizzModalImg.length}
+        </span>
       </div>
       
       

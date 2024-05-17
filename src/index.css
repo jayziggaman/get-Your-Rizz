@@ -418,3 +418,10 @@ button.btn.modal {
   object-fit: contain;
   transition: all 200ms ease-in-out;
 }
+
+.rizz-modal-img span.index {
+  position: fixed;
+  bottom: 10px;
+  background-color: gray;
+  padding: 10px;
+}
